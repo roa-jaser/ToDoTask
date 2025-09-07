@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To do Task</title>
+    <!-- Font Awesome CDN -->
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<!-- External CSS File -->
+<link rel="stylesheet" href="style2.css">
+</head>
+
+<body>
+    <main class="container">
+<!-- Input Card Section -->
+        <section class=" input-card" aria-label="Add new task">
+            <h1>TodoInput</h1>
+            <div class="input-row">
+                <label for="taskInput" class="input" aria-label="Task text">
+                        <i class="fas fa-list-check icon" ></i>
+                        <input id="taskInput" type="text" placeholder="New task" maxlength="120" minlength="5"/>
+                </label>
+                <button id="addBtn" class="btn btn-primary">Add new task</button>
+            </div>
+            <div id="errorMsg" class="error"></div>
+        </section>
+
+    </main>
+
+<script src="script.js"></script>
+</body>
+
+</html>
