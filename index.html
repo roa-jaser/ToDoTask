@@ -25,7 +25,25 @@
             </div>
             <div id="errorMsg" class="error"></div>
         </section>
+<!-- Filters -->
+        <section>
+        <h1>Todo List</h1>
 
+            <div class="filters">
+                <button class="tab active" data-filter="all" id="tabAll">All</button>
+                <button class="tab" data-filter="done" id="tabDone">Done</button>
+                <button class="tab" data-filter="todo" id="tabTodo">Todo</button>
+            </div>
+
+            <!-- List container -->
+            <div id="list" class="list"></div>
+
+            <!-- Bulk actions -->
+            <div class="bulk">
+                <button id="deleteDoneBtn" class="btn btn-danger" >Delete Done Tasks</button>
+                <button id="deleteAllBtn" class="btn btn-danger" >Delete All Tasks</button>
+            </div>
+        </section>
     </main>
 
 <script src="script.js"></script>
