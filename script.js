@@ -9,12 +9,12 @@ let tasks = load(); //it will return all the saved tasks
 render();
 
 // saving the task in the localstorage
-function save() {
+const save=()=> {
   localStorage.setItem("todo-tasks-v1", JSON.stringify(tasks));
 }
 
 //loading the saved tasks list
-function load() {
+    const load=()=> {
   try {
     return JSON.parse(localStorage.getItem("todo-tasks-v1")) || [];
   } catch {
@@ -23,7 +23,7 @@ function load() {
 }
 
 // validate task
-function validate(value) {
+    const validate=(value)=> {
   const text = value.trim();
 
   if (text === "") return "The task can not be empty";
@@ -35,19 +35,19 @@ function validate(value) {
 }
 
 // Show error
-function showError(msg) {
-  errorMsg.textContent = msg || "";
+const showError=(msg) =>{
+    errorMsg.textContent = msg || "";
 }
 
 //live validatiin while typing
-taskInput.addEventListener("input", function () {
+taskInput.addEventListener("input", ()=> {
   const err = validate(taskInput.value); // نتحقق من النص الحالي
   showError(err); // نعرض رسالة الخطأ إذا فيه
   addBtn.disabled = !!err; // Disable button if there's an error
 });
 
 // Add task
-function addTask() {
+const addTask=()=> {
   const text = taskInput.value;
   const err = validate(text);
   if (err) {
@@ -67,7 +67,7 @@ function addTask() {
 }
 
 // Render tasks
-function render() {
+const render=() =>{
   list.innerHTML = "";
 
   // نحدد أي مهام نعرض بناءً على الفلتر
@@ -103,57 +103,112 @@ function render() {
 
     //  toggle مهمة done / not done
     row.querySelector(".toggle").addEventListener("change", (e) => {
-      const id = row.dataset.id;
-      const task = tasks.find((t) => t.id === id);
-      if (task) {
+        const id = row.dataset.id;
+        const task = tasks.find((t) => t.id === id);
+        if (task) {
         task.done = e.target.checked;
         save();
         render();
-      }
+        }
     });
 
     //  delete
     row.querySelector(".delete").addEventListener("click", () => {
-      const id = row.dataset.id;
-      tasks = tasks.filter((t) => t.id !== id);
-      save();
-      render();
+        const id = row.dataset.id;
+        showConfirm("Are you sure you want to delete this task?", () => {
+        tasks = tasks.filter((t) => t.id !== id);
+        save();
+        render();
+        });
     });
 
     list.appendChild(row);
-  }
+    }
 }
 
 // adding button
 addBtn.addEventListener("click", addTask);
 
 taskInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") addTask();
+    if (e.key === "Enter") addTask();
 });
 
 // فلترة المهام
 document.querySelectorAll(".tab").forEach((btn) => {
-  btn.addEventListener("click", () => {
+    btn.addEventListener("click", () => {
     // نشيل active من كل الأزرار
-    document
-      .querySelectorAll(".tab")
-      .forEach((b) => b.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
 
     // نغير الفلتر الحالي
     currentFilter = btn.dataset.filter;
     render();
-  });
+    });
 });
-// حذف المهام المنجزة
-document.getElementById("deleteDoneBtn").addEventListener("click", () => {
-  tasks = tasks.filter((t) => !t.done); // نخلي بس اللي مش منجز
-  save();
-  render();
-});
+
+
+
+// --- Create Confirm Modal dynamically ---
+const modal = document.createElement("div");
+modal.id = "confirmModal";
+modal.className = "modal";
+modal.innerHTML = `
+<div class="modal-content">
+    <h3 id="modalTitle">Delete Task</h3>
+    <p id="modalMessage">Are you sure you want to delete this task?</p>
+    <div class="modal-actions">
+        <button id="confirmBtn" class="btn btn-danger">Confirm</button>
+        <button id="cancelBtn" class="btn btn-secondary">Cancel</button>
+    </div>
+    </div>
+`;
+document.body.appendChild(modal);
+
+// function to show confirm popup
+const showConfirm=(message, onConfirm) =>{
+    const modal = document.getElementById("confirmModal");
+    const modalMessage = document.getElementById("modalMessage");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+
+  // غير الرسالة
+    modalMessage.textContent = message;
+    modal.style.display = "block";
+
+  // امسح أي events سابقة
+    confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+    cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+
+  // رجعهم بعد الاستبدال
+    const newConfirmBtn = document.getElementById("confirmBtn");
+    const newCancelBtn = document.getElementById("cancelBtn");
+
+  // لو ضغط تأكيد
+    newConfirmBtn.onclick = () => {
+    modal.style.display = "none";
+    onConfirm();
+    };
+
+  // لو ضغط إلغاء
+    newCancelBtn.onclick = () => {
+    modal.style.display = "none";
+    };
+}
+
 // حذف كل المهام
 document.getElementById("deleteAllBtn").addEventListener("click", () => {
-  tasks = []; // نفرغ المصفوفة
-  save();
-  render();
+    showConfirm("Are you sure you want to delete ALL tasks?", () => {
+    tasks = [];
+    save();
+    render();
+    });
+});
+
+// حذف المهام المنجزة
+document.getElementById("deleteDoneBtn").addEventListener("click", () => {
+    showConfirm("Are you sure you want to delete all DONE tasks?", () => {
+    tasks = tasks.filter((t) => !t.done);
+    save();
+    render();
+    });
 });
