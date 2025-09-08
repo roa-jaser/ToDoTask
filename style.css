@@ -187,3 +187,9 @@ h1 {
     font-weight: bold;
 }
 
+.task.completed .text {
+  text-decoration: line-through;
+  color: gray;
+}
+
+

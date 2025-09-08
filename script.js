@@ -2,6 +2,7 @@ const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const errorMsg = document.getElementById("errorMsg");
 const list = document.getElementById("list");
+let currentFilter = "all"; // القيمة الافتراضية
 
 //using local storage
 let tasks = load(); //it will return all the saved tasks
@@ -69,14 +70,22 @@ function addTask() {
 function render() {
   list.innerHTML = "";
 
-  if (tasks.length === 0) {
+  // نحدد أي مهام نعرض بناءً على الفلتر
+  let filteredTasks = tasks;
+  if (currentFilter === "done") {
+    filteredTasks = tasks.filter((t) => t.done);
+  } else if (currentFilter === "todo") {
+    filteredTasks = tasks.filter((t) => !t.done);
+  }
+
+  if (filteredTasks.length === 0) {
     list.innerHTML = `<div class="empty">No tasks</div>`;
     return;
   }
 
-  for (const t of tasks) {
+  for (const t of filteredTasks) {
     const row = document.createElement("div");
-    row.className = `task`;
+    row.className = `task ${t.done ? "completed" : ""}`;
     row.dataset.id = t.id;
 
     row.innerHTML = `
@@ -91,12 +100,24 @@ function render() {
         <button class="icon-btn delete" title="Delete" aria-label="Delete task"><i class="fa-solid fa-trash"></i></button>
       </div>
     `;
-    // deleting the task when clicking on the trash
+
+    //  toggle مهمة done / not done
+    row.querySelector(".toggle").addEventListener("change", (e) => {
+      const id = row.dataset.id;
+      const task = tasks.find((t) => t.id === id);
+      if (task) {
+        task.done = e.target.checked;
+        save();
+        render();
+      }
+    });
+
+    //  delete
     row.querySelector(".delete").addEventListener("click", () => {
-      const id = row.dataset.id; // ناخذ الـID
-      tasks = tasks.filter((t) => t.id !== id); // نحذف المهمة من المصفوفة
-      save(); // نحفظ التغييرات في localStorage
-      render(); // نعيد عرض المهام
+      const id = row.dataset.id;
+      tasks = tasks.filter((t) => t.id !== id);
+      save();
+      render();
     });
 
     list.appendChild(row);
@@ -108,4 +129,31 @@ addBtn.addEventListener("click", addTask);
 
 taskInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") addTask();
+});
+
+// فلترة المهام
+document.querySelectorAll(".tab").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    // نشيل active من كل الأزرار
+    document
+      .querySelectorAll(".tab")
+      .forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    // نغير الفلتر الحالي
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+});
+// حذف المهام المنجزة
+document.getElementById("deleteDoneBtn").addEventListener("click", () => {
+  tasks = tasks.filter((t) => !t.done); // نخلي بس اللي مش منجز
+  save();
+  render();
+});
+// حذف كل المهام
+document.getElementById("deleteAllBtn").addEventListener("click", () => {
+  tasks = []; // نفرغ المصفوفة
+  save();
+  render();
 });
