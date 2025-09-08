@@ -69,6 +69,11 @@ function addTask() {
 function render() {
   list.innerHTML = "";
 
+  if (tasks.length === 0) {
+    list.innerHTML = `<div class="empty">No tasks</div>`;
+    return;
+  }
+
   for (const t of tasks) {
     const row = document.createElement("div");
     row.className = `task`;
