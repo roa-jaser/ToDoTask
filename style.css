@@ -1,14 +1,14 @@
 /* Root colors */
 :root {
-    --primary-color: #12adb8;
-    --primary-color-dark: #0d8a94;
-    --icon-color: #12adb8;
-    --input-border: #ccc;
-    --card-border: #ddd;
-    --card-bg: #fff;
-    --error-color: red;
-    --danger-color: #e74c3c;
-    --success-color: #2ecc71;
+  --primary-color: #12adb8;
+  --primary-color-dark: #0d8a94;
+  --icon-color: #12adb8;
+  --input-border: #ccc;
+  --card-border: #ddd;
+  --card-bg: #fff;
+  --error-color: red;
+  --danger-color: #e74c3c;
+  --success-color: #2ecc71;
 }
 * {
   margin: 0;
@@ -18,130 +18,128 @@
 }
 /* Main container */
 .container {
-    max-width: 1000px;
-    margin: 50px auto;
-    font-family: Arial, sans-serif;
+  max-width: 1000px;
+  margin: 50px auto;
+  font-family: Arial, sans-serif;
 }
 
 /* Headings */
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 /* Input Card */
 .input-card {
-    padding: 20px;
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
-    background-color: var(--card-bg);
+  padding: 20px;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: var(--card-bg);
 }
 
 /* Input row */
 .input-row {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* Input with icon */
 .input {
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--input-border);
-    border-radius: 5px;
-    padding: 10px;
-    background-color: var(--card-bg);
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--input-border);
+  border-radius: 5px;
+  padding: 10px;
+  background-color: var(--card-bg);
 }
 
 .input i.icon {
-    margin-right: 10px;
-    color: var(--icon-color);
-    font-size: 16px;
+  margin-right: 10px;
+  color: var(--icon-color);
+  font-size: 16px;
 }
 
 .input input {
-    border: none;
-    outline: none;
-    flex: 1;
-    font-size: 16px;
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 16px;
 }
 
 /* Buttons */
 .btn {
-    cursor: pointer;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
-    color: #fff;
+  background-color: var(--primary-color);
+  color: #fff;
 }
 .btn-primary:hover {
-    background-color: var(--primary-color-dark);
+  background-color: var(--primary-color-dark);
 }
- /* Error message */
+/* Error message */
 .error {
-    color: var(--error-color);
-    font-size: 14px;
-    margin-top: 5px;
-    min-height: 20px;
+  color: var(--error-color);
+  font-size: 12px;
+  margin-top: 5px;
+  min-height: 20px;
 }
 .bulk {
-    display: flex;
-    gap: 10px; 
+  display: flex;
+  gap: 10px;
 }
 
 .btn-danger {
-    background-color: var(--danger-color);
-    color: #fff;
-    width: 490px;       
-    padding: 10px 0;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    cursor: pointer;
+  background-color: var(--danger-color);
+  color: #fff;
+  width: 490px;
+  padding: 10px 0;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
 }
 
 .btn-danger:hover {
-    background-color: #c03a2b9d;
+  background-color: #c03a2b9d;
 }
 
 /* Filters */
 .filters {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  gap: 10px;
 }
 
 .filters .tab {
-    flex: 1;
-    padding: 10px 0;
-    background-color: var(--primary-color);
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    text-align: center;
-    transition: background-color 0.3s;
-    border: none; 
+  flex: 1;
+  padding: 10px 0;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  transition: background-color 0.3s;
+  border: none;
 }
 
-
 .filters .tab:hover {
-    background-color: var(--primary-color-dark);
+  background-color: var(--primary-color-dark);
 }
 
 /*  Todo List */
 .list {
-    margin-top: 10px;
+  margin-top: 10px;
 }
-
 
 /* Task row */
 .task {
@@ -155,7 +153,6 @@ h1 {
   margin-bottom: 8px;
   gap: 12px;
 }
-
 
 .task-actions {
   display: flex;
@@ -173,31 +170,30 @@ h1 {
 
 .task-actions .edit i {
   color: orange;
-  font-size: 18px; 
+  font-size: 18px;
 }
 
 .task-actions .delete i {
   color: red;
-  font-size: 18px; 
+  font-size: 18px;
 }
-.empty{
-    text-align: center;
-    padding: 15px;
-    font-size: 20px;
-    font-weight: bold;
+.empty {
+  text-align: center;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .task.completed .text {
   text-decoration: line-through;
-  color: gray;
+  color: brown;
 }
-
 
 .modal {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 
@@ -226,4 +222,11 @@ h1 {
   cursor: pointer;
 }
 
-
+.edit-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid black;
+  border-radius: 5px;
+  font-size: 16px;
+}

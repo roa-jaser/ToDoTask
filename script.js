@@ -6,7 +6,8 @@ const list = document.getElementById("list");
 let currentFilter = "all"; // القيمة الافتراضية
 
 // --- Load tasks from localStorage ---
-function load() { // استخدمت function declaration لتجنب خطأ hoisting
+function load() {
+  // استخدمت function declaration لتجنب خطأ hoisting
   try {
     return JSON.parse(localStorage.getItem("todo-tasks-v1")) || [];
   } catch {
@@ -24,7 +25,8 @@ function validate(value) {
   const text = value.trim();
   if (text === "") return "The task can not be empty";
   if (text.length <= 5) return "The task have to be more than 5 characters";
-  if (text[0] >= "0" && text[0] <= "9") return "The task can not start with a number";
+  if (text[0] >= "0" && text[0] <= "9")
+    return "The task can not start with a number";
   return null;
 }
 
@@ -41,8 +43,9 @@ function render() {
   list.innerHTML = "";
 
   let filteredTasks = tasks;
-  if (currentFilter === "done") filteredTasks = tasks.filter(t => t.done);
-  else if (currentFilter === "todo") filteredTasks = tasks.filter(t => !t.done);
+  if (currentFilter === "done") filteredTasks = tasks.filter((t) => t.done);
+  else if (currentFilter === "todo")
+    filteredTasks = tasks.filter((t) => !t.done);
 
   if (filteredTasks.length === 0) {
     list.innerHTML = `<div class="empty">No tasks</div>`;
@@ -59,15 +62,17 @@ function render() {
         <span class="text">${t.text}</span>
       </div>
       <div class="task-actions">
-        <input type="checkbox" class="toggle" ${t.done ? "checked" : ""} aria-label="Mark done">
+        <input type="checkbox" class="toggle" ${
+          t.done ? "checked" : ""
+        } aria-label="Mark done">
         <button class="icon-btn edit" title="Edit" aria-label="Edit task"><i class="fa-solid fa-pen"></i></button>
         <button class="icon-btn delete" title="Delete" aria-label="Delete task"><i class="fa-solid fa-trash"></i></button>
       </div>
     `;
 
     // Toggle done
-    row.querySelector(".toggle").addEventListener("change", e => {
-      const task = tasks.find(task => task.id === row.dataset.id);
+    row.querySelector(".toggle").addEventListener("change", (e) => {
+      const task = tasks.find((task) => task.id === row.dataset.id);
       if (task) {
         task.done = e.target.checked;
         save();
@@ -78,10 +83,18 @@ function render() {
     // Delete task
     row.querySelector(".delete").addEventListener("click", () => {
       showConfirm("Are you sure you want to delete this task?", () => {
-        tasks = tasks.filter(task => task.id !== row.dataset.id);
+        tasks = tasks.filter((task) => task.id !== row.dataset.id);
         save();
         render();
       });
+    });
+
+    // Edit task
+    row.querySelector(".edit").addEventListener("click", () => {
+      const task = tasks.find((task) => task.id === row.dataset.id);
+      if (task) {
+        showEditModal(task);
+      }
     });
 
     list.appendChild(row);
@@ -118,14 +131,16 @@ taskInput.addEventListener("input", () => {
 
 addBtn.addEventListener("click", addTask);
 
-taskInput.addEventListener("keydown", e => {
+taskInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") addTask();
 });
 
 // Filter tabs
-document.querySelectorAll(".tab").forEach(btn => {
+document.querySelectorAll(".tab").forEach((btn) => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    document
+      .querySelectorAll(".tab")
+      .forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
     currentFilter = btn.dataset.filter;
     render();
@@ -172,6 +187,68 @@ function showConfirm(message, onConfirm) {
   };
 }
 
+// --- Edit modal ---
+const editModal = document.createElement("div");
+editModal.id = "editModal";
+editModal.className = "modal";
+editModal.innerHTML = `
+  <div class="modal-content">
+      <h3 id="modalTitle">Edit Task</h3>
+      <input type="text" id="editInput" class="edit-input" />
+      <div id="editErrorMsg" class="error"></div>
+      <div class="modal-actions">
+          <button id="saveEditBtn" class="btn btn-primary">Save</button>
+          <button id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
+      </div>
+  </div>
+`;
+document.body.appendChild(editModal);
+
+function showEditModal(task) {
+  const modal = document.getElementById("editModal");
+  const input = document.getElementById("editInput");
+  const saveBtn = document.getElementById("saveEditBtn");
+  const cancelBtn = document.getElementById("cancelEditBtn");
+  const errorMsg = document.getElementById("editErrorMsg");
+
+  input.value = task.text; // putting the content of the selected task on the textbox to edit it
+  modal.style.display = "block";
+  errorMsg.textContent = "";
+  input.focus();
+
+  // عشان ما يضل مربوط event handlers قديمة
+  saveBtn.replaceWith(saveBtn.cloneNode(true));
+  cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+
+  const newSaveBtn = document.getElementById("saveEditBtn");
+  const newCancelBtn = document.getElementById("cancelEditBtn");
+
+  // live vakidation
+  input.addEventListener("input", () => {
+    const err = validate(input.value);
+    errorMsg.textContent = err || "";
+  });
+
+  // save btn
+  newSaveBtn.onclick = () => {
+    const newText = input.value.trim();
+    const err = validate(newText);
+    if (err) {
+      errorEdit.textContent = err;
+      return;
+    }
+    task.text = newText;
+    save();
+    modal.style.display = "none";
+    render();
+  };
+
+  // إلغاء
+  newCancelBtn.onclick = () => {
+    modal.style.display = "none";
+  };
+}
+
 // Delete all tasks
 document.getElementById("deleteAllBtn").addEventListener("click", () => {
   showConfirm("Are you sure you want to delete ALL tasks?", () => {
@@ -184,7 +261,7 @@ document.getElementById("deleteAllBtn").addEventListener("click", () => {
 // Delete done tasks
 document.getElementById("deleteDoneBtn").addEventListener("click", () => {
   showConfirm("Are you sure you want to delete all DONE tasks?", () => {
-    tasks = tasks.filter(t => !t.done);
+    tasks = tasks.filter((t) => !t.done);
     save();
     render();
   });
