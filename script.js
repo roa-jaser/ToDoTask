@@ -6,8 +6,9 @@ const list = document.getElementById("list");
 let currentFilter = "all"; // القيمة الافتراضية
 
 // --- Load tasks from localStorage ---
-function load() {
+const load=() =>{
   // استخدمت function declaration لتجنب خطأ hoisting
+  //  جربت الarrow function وما عمل اي ايرور حاليا 
   try {
     return JSON.parse(localStorage.getItem("todo-tasks-v1")) || [];
   } catch {
@@ -16,12 +17,12 @@ function load() {
 }
 
 // --- Save tasks to localStorage ---
-function save() {
+const save=()=> {
   localStorage.setItem("todo-tasks-v1", JSON.stringify(tasks));
 }
 
 // --- Validate task ---
-function validate(value) {
+const validate=(value)=> {
   const text = value.trim();
   if (text === "") return "The task can not be empty";
   if (text.length <= 5) return "The task have to be more than 5 characters";
@@ -31,7 +32,7 @@ function validate(value) {
 }
 
 // --- Show error ---
-function showError(msg) {
+const showError=(msg)=> {
   errorMsg.textContent = msg || "";
 }
 
@@ -39,7 +40,7 @@ function showError(msg) {
 let tasks = load(); // Load saved tasks
 
 // --- Render tasks ---
-function render() {
+const render=()=> {
   list.innerHTML = "";
 
   let filteredTasks = tasks;
@@ -99,10 +100,11 @@ function render() {
 
     list.appendChild(row);
   }
+  updateDeleteButtons();
 }
 
 // --- Add task ---
-function addTask() {
+const addTask=()=> {
   const text = taskInput.value;
   const err = validate(text);
   if (err) {
@@ -163,7 +165,7 @@ modal.innerHTML = `
 `;
 document.body.appendChild(modal);
 
-function showConfirm(message, onConfirm) {
+const showConfirm=(message, onConfirm)=> {
   const modal = document.getElementById("confirmModal");
   const modalMessage = document.getElementById("modalMessage");
   const confirmBtn = document.getElementById("confirmBtn");
@@ -204,7 +206,7 @@ editModal.innerHTML = `
 `;
 document.body.appendChild(editModal);
 
-function showEditModal(task) {
+const showEditModal=(task)=> {
   const modal = document.getElementById("editModal");
   const input = document.getElementById("editInput");
   const saveBtn = document.getElementById("saveEditBtn");
@@ -234,7 +236,7 @@ function showEditModal(task) {
     const newText = input.value.trim();
     const err = validate(newText);
     if (err) {
-      errorEdit.textContent = err;
+      errorMsg.textContent = err;
       return;
     }
     task.text = newText;
@@ -267,5 +269,23 @@ document.getElementById("deleteDoneBtn").addEventListener("click", () => {
   });
 });
 
+const updateDeleteButtons=()=> {
+  const deleteAllBtn = document.getElementById("deleteAllBtn");
+  const deleteDoneBtn = document.getElementById("deleteDoneBtn");
+
+  if (tasks.length === 0) {
+    // ما في ولا مهمة => تعطيل الزرين
+    deleteAllBtn.disabled = true;
+    deleteDoneBtn.disabled = true;
+  } else {
+    // في تاسكات => زر حذف الكل شغال
+    deleteAllBtn.disabled = false;
+    // زر حذف المنجزة يتفعل بس إذا في تاسكات منجزة
+    deleteDoneBtn.disabled = !tasks.some((t) => t.done);
+  }
+}
+
+
 // --- Initial render ---
 render();
+updateDeleteButtons();
